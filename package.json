@@ -1,0 +1,50 @@
+{
+  "name": "insight-frontend",
+  "version": "0.0.1",
+  "private": true,
+  "description": "React frontend powered by Vite + TypeScript, using pnpm, with Jest/RTL unit tests, Playwright E2E tests, and OpenAPI-based API client generation.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "echo \"No linter configured yet\"",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:debug": "playwright test --debug",
+    "playwright:install": "playwright install",
+    "ci": "pnpm lint && pnpm build && pnpm test && pnpm playwright",
+    "generate:api:core": "openapi --input ./openapi.json --output ./src/api/core --client fetch --useUnionTypes --useOptions",
+    "generate:api:meeting-intelligence": "openapi --input ./openapi.meeting-intelligence.json --output ./src/api/meeting-intelligence --client fetch --useUnionTypes --useOptions",
+    "generate:api:analytics": "openapi --input ./openapi.analytics.json --output ./src/api/analytics --client fetch --useUnionTypes --useOptions",
+    "generate:api:user-tenant": "openapi --input ./openapi.user-tenant.json --output ./src/api/user-tenant --client fetch --useUnionTypes --useOptions",
+    "generate:api:integrations-notifications": "openapi --input ./openapi.integrations-notifications.json --output ./src/api/integrations-notifications --client fetch --useUnionTypes --useOptions",
+    "generate:api:storage-media": "openapi --input ./openapi.storage-media.json --output ./src/api/storage-media --client fetch --useUnionTypes --useOptions",
+    "generate:api:all": "pnpm generate:api:core && pnpm generate:api:meeting-intelligence && pnpm generate:api:analytics && pnpm generate:api:user-tenant && pnpm generate:api:integrations-notifications && pnpm generate:api:storage-media",
+    "generate:api": "pnpm generate:api:all"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.0.1",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^22.7.4",
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react-swc": "^3.7.1",
+    "@vitest/coverage-v8": "^2.1.3",
+    "identity-obj-proxy": "^3.0.0",
+    "openapi-typescript-codegen": "^0.29.0",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.10",
+    "vitest": "^2.1.9"
+  },
+  "packageManager": "pnpm@9.0.0"
+}

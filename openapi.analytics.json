@@ -1,0 +1,229 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "AE & Analytics API",
+    "version": "1.0.0",
+    "description": "APIs for Insights Generation and analytics for AEs."
+  },
+  "servers": [
+    {
+      "url": "https://api.example.com",
+      "description": "Production"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Insights",
+      "description": "Insight generation and retrieval"
+    }
+  ],
+  "paths": {
+    "/analytics/insights": {
+      "get": {
+        "tags": ["Insights"],
+        "summary": "List generated insights for the current user",
+        "operationId": "listAnalyticsInsights",
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["new", "viewed", "dismissed"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of insights",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AnalyticsInsight"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Insights"],
+        "summary": "Trigger insight generation",
+        "operationId": "generateInsights",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateInsightsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Insight generation started",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenerationJob"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/analytics/insights/{id}": {
+      "get": {
+        "tags": ["Insights"],
+        "summary": "Get a single generated insight",
+        "operationId": "getAnalyticsInsight",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Insight details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalyticsInsight"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Insight not found"
+          }
+        }
+      }
+    },
+    "/analytics/jobs/{jobId}": {
+      "get": {
+        "tags": ["Insights"],
+        "summary": "Check the status of an insight generation job",
+        "operationId": "getGenerationJobStatus",
+        "parameters": [
+          {
+            "name": "jobId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Job status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenerationJob"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Job not found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AnalyticsInsight": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "accountId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["new", "viewed", "dismissed"]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": ["id", "title", "status", "createdAt"]
+      },
+      "GenerateInsightsRequest": {
+        "type": "object",
+        "properties": {
+          "accountId": {
+            "type": "string"
+          },
+          "dateRangeFrom": {
+            "type": "string",
+            "format": "date"
+          },
+          "dateRangeTo": {
+            "type": "string",
+            "format": "date"
+          }
+        },
+        "required": ["accountId"]
+      },
+      "GenerationJob": {
+        "type": "object",
+        "properties": {
+          "jobId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["queued", "running", "completed", "failed"]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "required": ["jobId", "status", "createdAt"]
+      }
+    }
+  }
+}
+
+

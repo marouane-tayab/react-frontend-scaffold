@@ -1,0 +1,49 @@
+# Azure Pipeline example configuration
+
+trigger:
+  - main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  NODE_VERSION: "20.x"
+
+steps:
+  - checkout: self
+    displayName: "Checkout repository"
+
+  - task: UseNode@1
+    displayName: "Use Node.js $(NODE_VERSION)"
+    inputs:
+      versionSpec: "$(NODE_VERSION)"
+
+  - script: |
+      corepack enable
+      corepack prepare pnpm@latest --activate
+      pnpm --version
+    displayName: "Enable pnpm via corepack"
+
+  - script: |
+      pnpm install
+    displayName: "Install dependencies"
+
+  - script: |
+      pnpm lint
+    displayName: "Run lint"
+
+  - script: |
+      pnpm build
+    displayName: "Build app"
+
+  - script: |
+      pnpm test
+    displayName: "Run unit tests (Vitest)"
+
+  - script: |
+      pnpm playwright:install --with-deps
+    displayName: "Install Playwright browsers"
+
+  - script: |
+      pnpm test:e2e
+    displayName: "Run end-to-end tests (Playwright)"

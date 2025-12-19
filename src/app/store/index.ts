@@ -1,5 +1,5 @@
-// Central app store entry point.
-// You can wire up Redux, Zustand, Jotai, or any other
-// state management solution here and re-export hooks.
+// Central app store using Zustand.
+// Create domain-specific stores and export them here.
 
-export {};
+export { useAuthStore } from './authStore';
+export { useUIStore } from './uiStore';

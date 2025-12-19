@@ -1,0 +1,26 @@
+# Dependencies
+node_modules
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# Build outputs
+dist
+build
+coverage
+
+# Test outputs
+test-results
+playwright-report
+
+# Generated files
+src/api/**/core/**
+src/api/**/models/**
+src/api/**/services/**
+
+# Config files that should maintain their format
+*.min.js
+*.min.css
+
+# Misc
+.DS_Store

@@ -1,4 +1,4 @@
-import { ApiError } from "../../api/core/core/ApiError";
+import { ApiError } from '../../api/core/core/ApiError';
 
 export interface ApiErrorResponse {
   message: string;
@@ -21,18 +21,18 @@ export function formatApiError(error: unknown): string {
     if (body?.errors) {
       // Format validation errors
       return Object.entries(body.errors)
-        .map(([field, messages]) => `${field}: ${messages.join(", ")}`)
-        .join("; ");
+        .map(([field, messages]) => `${field}: ${messages.join(', ')}`)
+        .join('; ');
     }
 
-    return error.message || "An API error occurred";
+    return error.message || 'An API error occurred';
   }
 
   if (error instanceof Error) {
     return error.message;
   }
 
-  return "An unexpected error occurred";
+  return 'An unexpected error occurred';
 }
 
 /**
@@ -42,7 +42,7 @@ export function formatApiError(error: unknown): string {
 export function handleApiError(error: unknown): void {
   // Log to console in development
   if (import.meta.env.DEV) {
-    console.error("API Error:", error);
+    console.error('API Error:', error);
   }
 
   // TODO: Send to error logging service

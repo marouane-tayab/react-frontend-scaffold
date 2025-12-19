@@ -1,5 +1,5 @@
-import { create } from "zustand";
-import { devtools, persist } from "zustand/middleware";
+import { create } from 'zustand';
+import { devtools, persist } from 'zustand/middleware';
 
 interface User {
   id: string;
@@ -39,42 +39,42 @@ export const useAuthStore = create<AuthStore>()(
 
         // Actions
         setUser: (user) =>
-          set({ user, isAuthenticated: !!user, error: null }, false, "auth/setUser"),
+          set({ user, isAuthenticated: !!user, error: null }, false, 'auth/setUser'),
 
         login: async (email, _password) => {
-          set({ isLoading: true, error: null }, false, "auth/login/start");
+          set({ isLoading: true, error: null }, false, 'auth/login/start');
           try {
             // TODO: Replace with actual API call
             await new Promise((resolve) => setTimeout(resolve, 1000));
 
             // Mock user data
             const user: User = {
-              id: "1",
+              id: '1',
               email,
-              name: email.split("@")[0],
+              name: email.split('@')[0],
             };
 
-            set({ user, isAuthenticated: true, isLoading: false }, false, "auth/login/success");
+            set({ user, isAuthenticated: true, isLoading: false }, false, 'auth/login/success');
           } catch (error) {
             set(
               {
-                error: error instanceof Error ? error.message : "Login failed",
+                error: error instanceof Error ? error.message : 'Login failed',
                 isLoading: false,
               },
               false,
-              "auth/login/error"
+              'auth/login/error'
             );
           }
         },
 
         logout: () => {
-          set({ user: null, isAuthenticated: false, error: null }, false, "auth/logout");
+          set({ user: null, isAuthenticated: false, error: null }, false, 'auth/logout');
         },
 
-        clearError: () => set({ error: null }, false, "auth/clearError"),
+        clearError: () => set({ error: null }, false, 'auth/clearError'),
       }),
       {
-        name: "auth-storage",
+        name: 'auth-storage',
         // Only persist user and isAuthenticated
         partialize: (state) => ({
           user: state.user,
@@ -82,6 +82,6 @@ export const useAuthStore = create<AuthStore>()(
         }),
       }
     ),
-    { name: "AuthStore" }
+    { name: 'AuthStore' }
   )
 );

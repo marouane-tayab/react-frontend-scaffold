@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 export function HomePage() {
   return (
@@ -9,8 +9,8 @@ export function HomePage() {
           React + TypeScript + Vite, with Jest/RTL, Playwright, and OpenAPI client generation.
         </p>
 
-        <nav style={{ marginTop: "2rem" }}>
-          <ul style={{ listStyle: "none", display: "flex", gap: "1rem", padding: 0 }}>
+        <nav style={{ marginTop: '2rem' }}>
+          <ul style={{ listStyle: 'none', display: 'flex', gap: '1rem', padding: 0 }}>
             <li>
               <Link to="/about">About</Link>
             </li>

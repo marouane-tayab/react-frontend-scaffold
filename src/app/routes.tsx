@@ -1,10 +1,10 @@
-import { lazy } from "react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { HomePage, AboutPage, NotFoundPage } from "./pages";
+import { lazy } from 'react';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { HomePage, AboutPage, NotFoundPage } from './pages';
 
 // Example of lazy loading for code splitting
 const DashboardPage = lazy(() =>
-  import("./pages/DashboardPage").then((module) => ({ default: module.DashboardPage }))
+  import('./pages/DashboardPage').then((module) => ({ default: module.DashboardPage }))
 );
 
 /**
@@ -13,19 +13,19 @@ const DashboardPage = lazy(() =>
  */
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <HomePage />,
   },
   {
-    path: "/about",
+    path: '/about',
     element: <AboutPage />,
   },
   {
-    path: "/dashboard",
+    path: '/dashboard',
     element: <DashboardPage />,
   },
   {
-    path: "*",
+    path: '*',
     element: <NotFoundPage />,
   },
 ]);

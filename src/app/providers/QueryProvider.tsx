@@ -1,8 +1,8 @@
-import { ReactNode } from "react";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { FEATURE_FLAGS } from "../config";
-import { queryClient } from "./queryClient";
+import { ReactNode } from 'react';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { FEATURE_FLAGS } from '../config';
+import { queryClient } from './queryClient';
 
 interface QueryProviderProps {
   children: ReactNode;

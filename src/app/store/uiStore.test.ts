@@ -1,36 +1,36 @@
-import { act, renderHook } from "@testing-library/react";
-import { describe, expect, it, beforeEach } from "vitest";
-import { useUIStore } from "./uiStore";
+import { act, renderHook } from '@testing-library/react';
+import { describe, expect, it, beforeEach } from 'vitest';
+import { useUIStore } from './uiStore';
 
-describe("useUIStore", () => {
+describe('useUIStore', () => {
   beforeEach(() => {
     // Reset store to initial state before each test
     useUIStore.setState({
       sidebarOpen: true,
-      theme: "system",
+      theme: 'system',
       notifications: [],
     });
   });
 
-  describe("initial state", () => {
-    it("has sidebar open by default", () => {
+  describe('initial state', () => {
+    it('has sidebar open by default', () => {
       const { result } = renderHook(() => useUIStore());
       expect(result.current.sidebarOpen).toBe(true);
     });
 
-    it("has system theme by default", () => {
+    it('has system theme by default', () => {
       const { result } = renderHook(() => useUIStore());
-      expect(result.current.theme).toBe("system");
+      expect(result.current.theme).toBe('system');
     });
 
-    it("has no notifications by default", () => {
+    it('has no notifications by default', () => {
       const { result } = renderHook(() => useUIStore());
       expect(result.current.notifications).toEqual([]);
     });
   });
 
-  describe("toggleSidebar", () => {
-    it("toggles sidebar from open to closed", () => {
+  describe('toggleSidebar', () => {
+    it('toggles sidebar from open to closed', () => {
       const { result } = renderHook(() => useUIStore());
 
       act(() => {
@@ -40,7 +40,7 @@ describe("useUIStore", () => {
       expect(result.current.sidebarOpen).toBe(false);
     });
 
-    it("toggles sidebar from closed to open", () => {
+    it('toggles sidebar from closed to open', () => {
       const { result } = renderHook(() => useUIStore());
 
       act(() => {
@@ -55,8 +55,8 @@ describe("useUIStore", () => {
     });
   });
 
-  describe("setSidebarOpen", () => {
-    it("sets sidebar to open", () => {
+  describe('setSidebarOpen', () => {
+    it('sets sidebar to open', () => {
       const { result } = renderHook(() => useUIStore());
 
       act(() => {
@@ -66,7 +66,7 @@ describe("useUIStore", () => {
       expect(result.current.sidebarOpen).toBe(true);
     });
 
-    it("sets sidebar to closed", () => {
+    it('sets sidebar to closed', () => {
       const { result } = renderHook(() => useUIStore());
 
       act(() => {
@@ -77,68 +77,68 @@ describe("useUIStore", () => {
     });
   });
 
-  describe("setTheme", () => {
-    it("sets theme to light", () => {
+  describe('setTheme', () => {
+    it('sets theme to light', () => {
       const { result } = renderHook(() => useUIStore());
 
       act(() => {
-        result.current.setTheme("light");
+        result.current.setTheme('light');
       });
 
-      expect(result.current.theme).toBe("light");
+      expect(result.current.theme).toBe('light');
     });
 
-    it("sets theme to dark", () => {
+    it('sets theme to dark', () => {
       const { result } = renderHook(() => useUIStore());
 
       act(() => {
-        result.current.setTheme("dark");
+        result.current.setTheme('dark');
       });
 
-      expect(result.current.theme).toBe("dark");
+      expect(result.current.theme).toBe('dark');
     });
 
-    it("sets theme to system", () => {
+    it('sets theme to system', () => {
       const { result } = renderHook(() => useUIStore());
 
       act(() => {
-        result.current.setTheme("system");
+        result.current.setTheme('system');
       });
 
-      expect(result.current.theme).toBe("system");
+      expect(result.current.theme).toBe('system');
     });
   });
 
-  describe("addNotification", () => {
-    it("adds a notification with generated id", () => {
+  describe('addNotification', () => {
+    it('adds a notification with generated id', () => {
       const { result } = renderHook(() => useUIStore());
 
       act(() => {
         result.current.addNotification({
-          type: "success",
-          message: "Test notification",
+          type: 'success',
+          message: 'Test notification',
         });
       });
 
       expect(result.current.notifications).toHaveLength(1);
       expect(result.current.notifications[0]).toMatchObject({
-        type: "success",
-        message: "Test notification",
+        type: 'success',
+        message: 'Test notification',
       });
       expect(result.current.notifications[0].id).toBeDefined();
     });
 
-    it("adds multiple notifications", () => {
+    it('adds multiple notifications', () => {
       const { result } = renderHook(() => useUIStore());
 
       act(() => {
         result.current.addNotification({
-          type: "info",
-          message: "First notification",
+          type: 'info',
+          message: 'First notification',
         });
         result.current.addNotification({
-          type: "error",
-          message: "Second notification",
+          type: 'error',
+          message: 'Second notification',
         });
       });
 
@@ -146,14 +146,14 @@ describe("useUIStore", () => {
     });
   });
 
-  describe("removeNotification", () => {
-    it("removes a specific notification", () => {
+  describe('removeNotification', () => {
+    it('removes a specific notification', () => {
       const { result } = renderHook(() => useUIStore());
 
       act(() => {
         result.current.addNotification({
-          type: "info",
-          message: "Test notification",
+          type: 'info',
+          message: 'Test notification',
         });
       });
 
@@ -166,17 +166,17 @@ describe("useUIStore", () => {
       expect(result.current.notifications).toHaveLength(0);
     });
 
-    it("removes only the specified notification", () => {
+    it('removes only the specified notification', () => {
       const { result } = renderHook(() => useUIStore());
 
       act(() => {
         result.current.addNotification({
-          type: "info",
-          message: "First notification",
+          type: 'info',
+          message: 'First notification',
         });
         result.current.addNotification({
-          type: "error",
-          message: "Second notification",
+          type: 'error',
+          message: 'Second notification',
         });
       });
 
@@ -187,22 +187,22 @@ describe("useUIStore", () => {
       });
 
       expect(result.current.notifications).toHaveLength(1);
-      expect(result.current.notifications[0].message).toBe("Second notification");
+      expect(result.current.notifications[0].message).toBe('Second notification');
     });
   });
 
-  describe("clearNotifications", () => {
-    it("clears all notifications", () => {
+  describe('clearNotifications', () => {
+    it('clears all notifications', () => {
       const { result } = renderHook(() => useUIStore());
 
       act(() => {
         result.current.addNotification({
-          type: "info",
-          message: "First notification",
+          type: 'info',
+          message: 'First notification',
         });
         result.current.addNotification({
-          type: "error",
-          message: "Second notification",
+          type: 'error',
+          message: 'Second notification',
         });
       });
 

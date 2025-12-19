@@ -1,234 +1,229 @@
-import { describe, expect, it } from "vitest";
-import { ApiError } from "../../api/core/core/ApiError";
-import {
-  formatApiError,
-  isNetworkError,
-  isAuthError,
-  shouldRetry,
-} from "./apiErrorHandler";
+import { describe, expect, it } from 'vitest';
+import { ApiError } from '../../api/core/core/ApiError';
+import { formatApiError, isNetworkError, isAuthError, shouldRetry } from './apiErrorHandler';
 
-describe("apiErrorHandler", () => {
-  describe("formatApiError", () => {
-    it("formats ApiError with message", () => {
+describe('apiErrorHandler', () => {
+  describe('formatApiError', () => {
+    it('formats ApiError with message', () => {
       const error = new ApiError(
         {
-          method: "GET",
-          url: "/test",
+          method: 'GET',
+          url: '/test',
         },
         {
-          url: "/test",
+          url: '/test',
           ok: false,
           status: 400,
-          statusText: "Bad Request",
+          statusText: 'Bad Request',
           body: {
-            message: "Invalid request",
+            message: 'Invalid request',
           },
         },
-        "Invalid request"
+        'Invalid request'
       );
 
-      expect(formatApiError(error)).toBe("Invalid request");
+      expect(formatApiError(error)).toBe('Invalid request');
     });
 
-    it("formats ApiError with validation errors", () => {
+    it('formats ApiError with validation errors', () => {
       const error = new ApiError(
         {
-          method: "POST",
-          url: "/test",
+          method: 'POST',
+          url: '/test',
         },
         {
-          url: "/test",
+          url: '/test',
           ok: false,
           status: 422,
-          statusText: "Unprocessable Entity",
+          statusText: 'Unprocessable Entity',
           body: {
             errors: {
-              email: ["Email is required"],
-              password: ["Password must be at least 8 characters"],
+              email: ['Email is required'],
+              password: ['Password must be at least 8 characters'],
             },
           },
         },
-        "Validation failed"
+        'Validation failed'
       );
 
       const result = formatApiError(error);
-      expect(result).toContain("email: Email is required");
-      expect(result).toContain("password: Password must be at least 8 characters");
+      expect(result).toContain('email: Email is required');
+      expect(result).toContain('password: Password must be at least 8 characters');
     });
 
-    it("formats generic Error", () => {
-      const error = new Error("Something went wrong");
-      expect(formatApiError(error)).toBe("Something went wrong");
+    it('formats generic Error', () => {
+      const error = new Error('Something went wrong');
+      expect(formatApiError(error)).toBe('Something went wrong');
     });
 
-    it("formats unknown error", () => {
-      const error = "string error";
-      expect(formatApiError(error)).toBe("An unexpected error occurred");
+    it('formats unknown error', () => {
+      const error = 'string error';
+      expect(formatApiError(error)).toBe('An unexpected error occurred');
     });
 
-    it("handles ApiError without body", () => {
+    it('handles ApiError without body', () => {
       const error = new ApiError(
         {
-          method: "GET",
-          url: "/test",
+          method: 'GET',
+          url: '/test',
         },
         {
-          url: "/test",
+          url: '/test',
           ok: false,
           status: 500,
-          statusText: "Internal Server Error",
+          statusText: 'Internal Server Error',
           body: undefined,
         },
-        "Server error"
+        'Server error'
       );
 
-      expect(formatApiError(error)).toBe("Server error");
+      expect(formatApiError(error)).toBe('Server error');
     });
   });
 
-  describe("isNetworkError", () => {
-    it("returns true for status 0 (network error)", () => {
+  describe('isNetworkError', () => {
+    it('returns true for status 0 (network error)', () => {
       const error = new ApiError(
         {
-          method: "GET",
-          url: "/test",
+          method: 'GET',
+          url: '/test',
         },
         {
-          url: "/test",
+          url: '/test',
           ok: false,
           status: 0,
-          statusText: "Network Error",
+          statusText: 'Network Error',
           body: null,
         },
-        "Network error"
+        'Network error'
       );
 
       expect(isNetworkError(error)).toBe(true);
     });
 
-    it("returns true for 5xx errors", () => {
+    it('returns true for 5xx errors', () => {
       const error = new ApiError(
         {
-          method: "GET",
-          url: "/test",
+          method: 'GET',
+          url: '/test',
         },
         {
-          url: "/test",
+          url: '/test',
           ok: false,
           status: 500,
-          statusText: "Internal Server Error",
+          statusText: 'Internal Server Error',
           body: null,
         },
-        "Server error"
+        'Server error'
       );
 
       expect(isNetworkError(error)).toBe(true);
     });
 
-    it("returns false for 4xx errors", () => {
+    it('returns false for 4xx errors', () => {
       const error = new ApiError(
         {
-          method: "GET",
-          url: "/test",
+          method: 'GET',
+          url: '/test',
         },
         {
-          url: "/test",
+          url: '/test',
           ok: false,
           status: 404,
-          statusText: "Not Found",
+          statusText: 'Not Found',
           body: null,
         },
-        "Not found"
+        'Not found'
       );
 
       expect(isNetworkError(error)).toBe(false);
     });
 
-    it("returns false for non-ApiError", () => {
-      const error = new Error("Generic error");
+    it('returns false for non-ApiError', () => {
+      const error = new Error('Generic error');
       expect(isNetworkError(error)).toBe(false);
     });
   });
 
-  describe("isAuthError", () => {
-    it("returns true for 401 Unauthorized", () => {
+  describe('isAuthError', () => {
+    it('returns true for 401 Unauthorized', () => {
       const error = new ApiError(
         {
-          method: "GET",
-          url: "/test",
+          method: 'GET',
+          url: '/test',
         },
         {
-          url: "/test",
+          url: '/test',
           ok: false,
           status: 401,
-          statusText: "Unauthorized",
+          statusText: 'Unauthorized',
           body: null,
         },
-        "Unauthorized"
+        'Unauthorized'
       );
 
       expect(isAuthError(error)).toBe(true);
     });
 
-    it("returns true for 403 Forbidden", () => {
+    it('returns true for 403 Forbidden', () => {
       const error = new ApiError(
         {
-          method: "GET",
-          url: "/test",
+          method: 'GET',
+          url: '/test',
         },
         {
-          url: "/test",
+          url: '/test',
           ok: false,
           status: 403,
-          statusText: "Forbidden",
+          statusText: 'Forbidden',
           body: null,
         },
-        "Forbidden"
+        'Forbidden'
       );
 
       expect(isAuthError(error)).toBe(true);
     });
 
-    it("returns false for other status codes", () => {
+    it('returns false for other status codes', () => {
       const error = new ApiError(
         {
-          method: "GET",
-          url: "/test",
+          method: 'GET',
+          url: '/test',
         },
         {
-          url: "/test",
+          url: '/test',
           ok: false,
           status: 404,
-          statusText: "Not Found",
+          statusText: 'Not Found',
           body: null,
         },
-        "Not found"
+        'Not found'
       );
 
       expect(isAuthError(error)).toBe(false);
     });
 
-    it("returns false for non-ApiError", () => {
-      const error = new Error("Generic error");
+    it('returns false for non-ApiError', () => {
+      const error = new Error('Generic error');
       expect(isAuthError(error)).toBe(false);
     });
   });
 
-  describe("shouldRetry", () => {
-    it("retries network errors up to 3 attempts", () => {
+  describe('shouldRetry', () => {
+    it('retries network errors up to 3 attempts', () => {
       const error = new ApiError(
         {
-          method: "GET",
-          url: "/test",
+          method: 'GET',
+          url: '/test',
         },
         {
-          url: "/test",
+          url: '/test',
           ok: false,
           status: 0,
-          statusText: "Network Error",
+          statusText: 'Network Error',
           body: null,
         },
-        "Network error"
+        'Network error'
       );
 
       expect(shouldRetry(error, 1)).toBe(true);
@@ -236,20 +231,20 @@ describe("apiErrorHandler", () => {
       expect(shouldRetry(error, 3)).toBe(false);
     });
 
-    it("retries 5xx errors up to 3 attempts", () => {
+    it('retries 5xx errors up to 3 attempts', () => {
       const error = new ApiError(
         {
-          method: "GET",
-          url: "/test",
+          method: 'GET',
+          url: '/test',
         },
         {
-          url: "/test",
+          url: '/test',
           ok: false,
           status: 500,
-          statusText: "Internal Server Error",
+          statusText: 'Internal Server Error',
           body: null,
         },
-        "Server error"
+        'Server error'
       );
 
       expect(shouldRetry(error, 1)).toBe(true);
@@ -257,47 +252,47 @@ describe("apiErrorHandler", () => {
       expect(shouldRetry(error, 3)).toBe(false);
     });
 
-    it("retries 429 rate limit up to 2 attempts", () => {
+    it('retries 429 rate limit up to 2 attempts', () => {
       const error = new ApiError(
         {
-          method: "GET",
-          url: "/test",
+          method: 'GET',
+          url: '/test',
         },
         {
-          url: "/test",
+          url: '/test',
           ok: false,
           status: 429,
-          statusText: "Too Many Requests",
+          statusText: 'Too Many Requests',
           body: null,
         },
-        "Rate limited"
+        'Rate limited'
       );
 
       expect(shouldRetry(error, 1)).toBe(true);
       expect(shouldRetry(error, 2)).toBe(false);
     });
 
-    it("does not retry 4xx client errors", () => {
+    it('does not retry 4xx client errors', () => {
       const error = new ApiError(
         {
-          method: "GET",
-          url: "/test",
+          method: 'GET',
+          url: '/test',
         },
         {
-          url: "/test",
+          url: '/test',
           ok: false,
           status: 400,
-          statusText: "Bad Request",
+          statusText: 'Bad Request',
           body: null,
         },
-        "Bad request"
+        'Bad request'
       );
 
       expect(shouldRetry(error, 1)).toBe(false);
     });
 
-    it("does not retry non-ApiError", () => {
-      const error = new Error("Generic error");
+    it('does not retry non-ApiError', () => {
+      const error = new Error('Generic error');
       expect(shouldRetry(error, 1)).toBe(false);
     });
   });

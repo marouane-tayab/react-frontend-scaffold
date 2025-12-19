@@ -11,19 +11,25 @@ React + TypeScript app bootstrapped in a Vite-style layout, configured for **pnp
 - **Node.js** 18+ (recommended)
 - **pnpm** installed globally (`npm install -g pnpm`)
 
-### Install dependencies
+### Quick Start
 
+1. **Copy environment variables**:
+```bash
+cp .env.example .env
+```
+Edit `.env` with your API endpoints.
+
+2. **Install dependencies**:
 ```bash
 pnpm install
 ```
 
-### Run the dev server
-
+3. **Start development server**:
 ```bash
 pnpm dev
 ```
 
-The app will be available at `http://localhost:5173`.
+The app will be available at `http://localhost:8000`.
 
 ### Run unit tests (Vitest + RTL)
 
@@ -39,6 +45,17 @@ Unit tests are configured with:
 - `jsdom` test environment
 - React Testing Library and `@testing-library/jest-dom` in `src/tests/setupTests.ts`
 - Coverage reporting via `@vitest/coverage-v8` with a global 80% threshold (lines/branches/functions/statements)
+
+## Project Guidelines
+
+See [.github/copilot-instructions.md](.github/copilot-instructions.md) for detailed coding standards and best practices.
+
+## Environment Variables
+
+All environment variables must:
+1. Start with `VITE_` prefix
+2. Be defined in `.env.example`
+3. Have TypeScript types in `src/vite-env.d.ts`
 
 ### Run E2E tests (Playwright)
 
